@@ -48,7 +48,9 @@ GAME RULES:
                 // Get a random number between 1 and 6
                 var dice = Math.floor(Math.random() * (7 - 1) + 1);
                 // Update the dice image
-                document.getElementById('dice').src = 'dice-' + dice + '.png';
+                var diceImg = document.getElementById('dice');
+                diceImg.style.display = 'block';
+                diceImg.src = 'dice-' + dice + '.png';
 
                 if (dice === 1) { // If rolled dice is 1, reset current point of active player to 0, the other player takes turn
                     this.roundPt = 0;
@@ -58,7 +60,6 @@ GAME RULES:
                     this.roundPt += dice;
                     document.getElementById('current-' + this.activePlayer.id).textContent = this.roundPt;
                 }
-                document.querySelector('.dice').style.display = 'block';
             },
         
             // Add current point to global point and reset current point to 0
@@ -82,7 +83,7 @@ GAME RULES:
         document.getElementById('score-1').textContent = 0;
         document.getElementById('current-0').textContent = 0;
         document.getElementById('current-1').textContent = 0;
-        document.querySelector('.dice').style.display = 'none';
+        document.getElementById('dice').style.display = 'none';
 
         // Setup onclick event listeners
         document.getElementById('new-game').addEventListener('click', startNewGame);
