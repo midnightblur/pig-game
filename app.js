@@ -52,20 +52,21 @@ GAME RULES:
 
                 if (dice === 1) { // If rolled dice is 1, reset current point of active player to 0, the other player takes turn
                     this.roundPt = 0;
-                    document.getElementById('current-' + this.activePlayer.id).innerHTML = this.roundPt;
+                    document.getElementById('current-' + this.activePlayer.id).textContent = this.roundPt;
                     this.nextPlayerTurn();
                 } else { // Otherwise, the active player's current point is increased
                     this.roundPt += dice;
-                    document.getElementById('current-' + this.activePlayer.id).innerHTML = this.roundPt;
+                    document.getElementById('current-' + this.activePlayer.id).textContent = this.roundPt;
                 }
+                document.querySelector('.dice').style.display = 'block';
             },
         
             // Add current point to global point and reset current point to 0
             hold: function() {
                 this.activePlayer.point += this.roundPt;
                 this.roundPt = 0;
-                document.getElementById('score-' + this.activePlayer.id).innerHTML = this.activePlayer.point;
-                document.getElementById('current-' + this.activePlayer.id).innerHTML = this.roundPt;
+                document.getElementById('score-' + this.activePlayer.id).textContent = this.activePlayer.point;
+                document.getElementById('current-' + this.activePlayer.id).textContent = this.roundPt;
 
                 if (this.activePlayer.point >= this.winningPt) {
                     alert('Player ' + (this.activePlayer.id + 1) + ' WIN!!!');
@@ -77,22 +78,26 @@ GAME RULES:
         };
 
         // Reset game state
-        document.getElementById('score-0').innerHTML = 0;
-        document.getElementById('score-1').innerHTML = 0;
-        document.getElementById('current-0').innerHTML = 0;
-        document.getElementById('current-1').innerHTML = 0;
+        document.getElementById('score-0').textContent = 0;
+        document.getElementById('score-1').textContent = 0;
+        document.getElementById('current-0').textContent = 0;
+        document.getElementById('current-1').textContent = 0;
+        document.querySelector('.dice').style.display = 'none';
 
         // Setup onclick event listeners
-        document.getElementById('new-game').onclick = function() {
-            startNewGame();
-        };
-        document.getElementById('roll-dice').onclick = function() {
-            theGame.rollDice()
-        };
-        document.getElementById('hold').onclick = function() {
-            theGame.hold();
-        };
+        document.getElementById('new-game').addEventListener('click', startNewGame);
+        document.getElementById('roll-dice').addEventListener('click', function() { theGame.rollDice(); });
+        document.getElementById('hold').addEventListener('click', function() { theGame.hold(); });
+        // document.getElementById('new-game').onclick = function() {
+        //     startNewGame();
+        // };
+        // document.getElementById('roll-dice').onclick = function() {
+        //     theGame.rollDice()
+        // };
+        // document.getElementById('hold').onclick = function() {
+        //     theGame.hold();
+        // };
     };
 
     startNewGame();
-}())
+}());
