@@ -31,6 +31,7 @@ GAME RULES:
         roundPt: 0,
         players: [player_0, player_1],
         activePlayer: player_0,
+        isPlaying: true,
 
         // Give the turn to the next player
         nextPlayerTurn: function() {
@@ -47,38 +48,43 @@ GAME RULES:
         },
 
         rollDice: function() {
-            // Get a random number between 1 and 6
-            var dice = Math.floor(Math.random() * (7 - 1) + 1);
-            // Update the dice image
-            var diceImg = document.getElementById('dice');
-            diceImg.style.display = 'block';
-            diceImg.src = 'dice-' + dice + '.png';
+            if (this.isPlaying) {
+                // Get a random number between 1 and 6
+                var dice = Math.floor(Math.random() * (7 - 1) + 1);
+                // Update the dice image
+                var diceImg = document.getElementById('dice');
+                diceImg.style.display = 'block';
+                diceImg.src = 'dice-' + dice + '.png';
 
-            if (dice === 1) { // If rolled dice is 1, reset current point of active player to 0, the other player takes turn
-                this.roundPt = 0;
-                document.getElementById('current-' + this.activePlayer.id).textContent = this.roundPt;
-                this.nextPlayerTurn();
-            } else { // Otherwise, the active player's current point is increased
-                this.roundPt += dice;
-                document.getElementById('current-' + this.activePlayer.id).textContent = this.roundPt;
+                if (dice === 1) { // If rolled dice is 1, reset current point of active player to 0, the other player takes turn
+                    this.roundPt = 0;
+                    document.getElementById('current-' + this.activePlayer.id).textContent = this.roundPt;
+                    this.nextPlayerTurn();
+                } else { // Otherwise, the active player's current point is increased
+                    this.roundPt += dice;
+                    document.getElementById('current-' + this.activePlayer.id).textContent = this.roundPt;
+                }
             }
         },
 
         // Add current point to global point and reset current point to 0
         hold: function() {
-            this.activePlayer.point += this.roundPt;
-            this.roundPt = 0;
-            document.getElementById('score-' + this.activePlayer.id).textContent = this.activePlayer.point;
-            document.getElementById('current-' + this.activePlayer.id).textContent = this.roundPt;
+            if (this.isPlaying) {
+                this.activePlayer.point += this.roundPt;
+                this.roundPt = 0;
+                document.getElementById('score-' + this.activePlayer.id).textContent = this.activePlayer.point;
+                document.getElementById('current-' + this.activePlayer.id).textContent = this.roundPt;
 
-            if (this.activePlayer.point >= this.winningPt) {
-                var activePlayerPanel = document.querySelector('.player-' + this.activePlayer.id + '-panel');
-                activePlayerPanel.classList.add('winner');
-                activePlayerPanel.classList.toggle('active');
-                document.getElementById('name-' + this.activePlayer.id).textContent = 'WINNER';
-                hideTheDice();
-            } else {
-                this.nextPlayerTurn();
+                if (this.activePlayer.point >= this.winningPt) {
+                    var activePlayerPanel = document.querySelector('.player-' + this.activePlayer.id + '-panel');
+                    activePlayerPanel.classList.add('winner');
+                    activePlayerPanel.classList.toggle('active');
+                    document.getElementById('name-' + this.activePlayer.id).textContent = 'WINNER';
+                    hideTheDice();
+                    this.isPlaying = false;
+                } else {
+                    this.nextPlayerTurn();
+                }
             }
         },
     };
@@ -98,6 +104,7 @@ GAME RULES:
         document.getElementById('current-0').textContent = 0;
         document.getElementById('current-1').textContent = 0;
         hideTheDice();
+        theGame.isPlaying = true;
     };
 
     function hideTheDice() {
