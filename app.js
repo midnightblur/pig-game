@@ -43,7 +43,7 @@ GAME RULES:
             }
             this.activePlayer = this.players[activeIndex];
             document.querySelector('.player-' + this.activePlayer.id +'-panel').classList.toggle('active');
-            document.getElementById('dice').style.display = 'none';
+            hideTheDice();
         },
 
         rollDice: function() {
@@ -76,6 +76,7 @@ GAME RULES:
                 activePlayerPanel.classList.add('winner');
                 activePlayerPanel.classList.toggle('active');
                 document.getElementById('name-' + this.activePlayer.id).textContent = 'WINNER';
+                hideTheDice();
             } else {
                 this.nextPlayerTurn();
             }
@@ -89,13 +90,17 @@ GAME RULES:
         document.querySelector('.player-0-panel').classList.remove('active');
         document.querySelector('.player-1-panel').classList.remove('active');
         document.querySelector('.player-0-panel').classList.add('active');
-        
+
         document.getElementById('name-0').textContent = 'PLAYER 1';
         document.getElementById('name-1').textContent = 'PLAYER 2';
         document.getElementById('score-0').textContent = player_0.point = 0;
         document.getElementById('score-1').textContent = player_1.point = 0;
         document.getElementById('current-0').textContent = 0;
         document.getElementById('current-1').textContent = 0;
+        hideTheDice();
+    };
+
+    function hideTheDice() {
         document.getElementById('dice').style.display = 'none';
     };
 
