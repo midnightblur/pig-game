@@ -139,7 +139,9 @@ GAME RULES:
         document.getElementById('current-1').textContent = 0;
         document.getElementById('dice-0').style.visibility = 'hidden';
         document.getElementById('dice-1').style.visibility = 'hidden';
+
         theGame.isPlaying = true;
+        theGame.activePlayer = theGame.players[0];
     };
 
     // Setup onclick event listeners
