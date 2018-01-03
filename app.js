@@ -36,14 +36,15 @@ GAME RULES:
             // Give the turn to the next player
             nextPlayerTurn: function() {
                 var activeIndex = this.players.indexOf(this.activePlayer);
-                document.querySelector('.player-' + this.activePlayer.id +'-panel').classList.remove('active');
+                document.querySelector('.player-' + this.activePlayer.id +'-panel').classList.toggle('active');
                 if (activeIndex >= this.players.length - 1) {
                     activeIndex = 0;
                 } else {
                     activeIndex++;
                 }
                 this.activePlayer = this.players[activeIndex];
-                document.querySelector('.player-' + this.activePlayer.id +'-panel').classList.add('active');
+                document.querySelector('.player-' + this.activePlayer.id +'-panel').classList.toggle('active');
+                document.getElementById('dice').style.display = 'none';
             },
 
             rollDice: function() {
