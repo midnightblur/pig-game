@@ -26,7 +26,9 @@ GAME RULES:
     player_1.id = 1;
     player_1.point = 0;
 
-    // Setup the game object
+    /**
+     * The game object is reponsible for holding the game state and handling the game
+     */
     this.theGame = {
         winningPt: 100,
         roundPt: 0,
@@ -35,8 +37,16 @@ GAME RULES:
         activePlayer: player_0,
         isPlaying: true,
 
-        // Give the turn to the next player
+        /**
+         * Give the turn to the next player
+         */
         nextPlayerTurn: function() {
+            // Reset for the next turn
+            document.getElementById('current-' + this.activePlayer.id).textContent = this.roundPt = 0;
+            this.previousDice = 0;
+            hideTheDice();
+
+            // Find the next player and set him to be active player
             var activeIndex = this.players.indexOf(this.activePlayer);
             document.querySelector('.player-' + this.activePlayer.id +'-panel').classList.toggle('active');
             if (activeIndex >= this.players.length - 1) {
@@ -45,32 +55,30 @@ GAME RULES:
                 activeIndex++;
             }
             this.activePlayer = this.players[activeIndex];
-            this.previousDice = 0;
             document.querySelector('.player-' + this.activePlayer.id +'-panel').classList.toggle('active');
-            hideTheDice();
         },
 
+        /**
+         * Let the active player roll a dice and decide how the game advance depending on the result
+         */
         rollDice: function() {
             if (this.isPlaying) {
                 // Get a random number between 1 and 6
                 var dice = Math.floor(Math.random() * (7 - 1) + 1);
+                console.log('dice = ' + dice);
+
                 // Update the dice image
                 var diceImg = document.getElementById('dice');
                 diceImg.style.display = 'block';
                 diceImg.src = 'dice-' + dice + '.png';
-                console.log('dice = ' + dice);
-                console.log('previousDice = ' + this.previousDice);
+
+                // Deciding how the game advance based on the dice result
                 if (dice === this.previousDice === 6) { // If the player rolls two 6 dice in a row
-                    this.activePlayer.point = 0;
-                    this.roundPt = 0;
-                    document.getElementById('score-' + this.activePlayer.id).textContent = this.activePlayer.point;
-                    document.getElementById('current-' + this.activePlayer.id).textContent = this.roundPt;
+                    this.updateActivePlayerPoint(0); // He loses all of his point
                     this.nextPlayerTurn();
                 } else {
                     this.previousDice = dice;
                     if (dice === 1) { // If rolled dice is 1, reset current point of active player to 0, the other player takes turn
-                        this.roundPt = 0;
-                        document.getElementById('current-' + this.activePlayer.id).textContent = this.roundPt;
                         this.nextPlayerTurn();
                     } else { // Otherwise, the active player's current point is increased
                         this.roundPt += dice;
@@ -83,9 +91,8 @@ GAME RULES:
         // Add current point to global point and reset current point to 0
         hold: function() {
             if (this.isPlaying) {
-                this.activePlayer.point += this.roundPt;
-                this.roundPt = 0;
-                document.getElementById('score-' + this.activePlayer.id).textContent = this.activePlayer.point;
+                var newPoint = this.activePlayer.point + this.roundPt;
+                this.updateActivePlayerPoint(newPoint);
                 document.getElementById('current-' + this.activePlayer.id).textContent = this.roundPt;
 
                 if (this.activePlayer.point >= this.winningPt) {
@@ -99,6 +106,11 @@ GAME RULES:
                     this.nextPlayerTurn();
                 }
             }
+        },
+
+        updateActivePlayerPoint: function(newPoint) {
+            this.activePlayer.point = newPoint;
+            document.getElementById('score-' + this.activePlayer.id).textContent = this.activePlayer.point;
         },
     };
 
