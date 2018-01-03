@@ -27,7 +27,7 @@ GAME RULES:
 
     // Setup the game object
     this.theGame = {
-        winningPt: 20,
+        winningPt: 100,
         roundPt: 0,
         players: [player_0, player_1],
         activePlayer: player_0,
