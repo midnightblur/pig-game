@@ -56,6 +56,9 @@ GAME RULES:
             }
             this.activePlayer = this.players[activeIndex];
             document.querySelector('.player-' + this.activePlayer.id +'-panel').classList.toggle('active');
+
+            // Hide the hold button at the beginning of the round since round point is 0
+            document.getElementById('hold').style.display = 'none';
         },
 
         /**
@@ -63,9 +66,13 @@ GAME RULES:
          */
         rollDice: function() {
             if (this.isPlaying) {
+                // Display the hold button
+                document.getElementById('hold').style.display = 'block';
+
                 // Get a random number between 1 and 6
                 var dice = Math.floor(Math.random() * (7 - 1) + 1);
-                console.log('dice = ' + dice);
+                console.log('Player ' + (this.activePlayer.id + 1) + ' rolls ' + dice);
+                console.log('Previous dice = ' + this.previousDice);
 
                 // Update the dice image
                 var diceImg = document.getElementById('dice');
@@ -73,7 +80,8 @@ GAME RULES:
                 diceImg.src = 'dice-' + dice + '.png';
 
                 // Deciding how the game advance based on the dice result
-                if (dice === this.previousDice === 6) { // If the player rolls two 6 dice in a row
+                if (dice === this.previousDice && this.previousDice === 6) { // If the player rolls two 6 dice in a row
+                    console.log('Player ' + (this.activePlayer.id + 1) + ' rolls two 6 dice in a row');
                     this.updateActivePlayerPoint(0); // He loses all of his point
                     this.nextPlayerTurn();
                 } else {
@@ -86,6 +94,7 @@ GAME RULES:
                     }
                 }
             }
+            console.log('--------------------');
         },
 
         // Add current point to global point and reset current point to 0
@@ -121,6 +130,8 @@ GAME RULES:
         document.querySelector('.player-0-panel').classList.remove('active');
         document.querySelector('.player-1-panel').classList.remove('active');
         document.querySelector('.player-0-panel').classList.add('active');
+
+        document.getElementById('hold').style.display = 'none';
 
         document.getElementById('name-0').textContent = 'PLAYER 1';
         document.getElementById('name-1').textContent = 'PLAYER 2';
