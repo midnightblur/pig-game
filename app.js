@@ -14,42 +14,22 @@ GAME RULES:
         // Define the player prototype
         var player = {
             id: -1,
-            globalPt: 0,
-            currentPt: 0,
-        };
-        
-        // Define the prototype's methods
-        player.prototype = {
-            // Return the id of the player
-            getID: function() {
-                return this.id;
-            },
-        
-            // Return the global point of the player
-            getGlobalPoint: function() {
-                return this.globalPt;
-            },
-        
-            // Return the current point of the player
-            getCurrentPoint: function() {
-                return this.currentPt;
-            }
+            point: 0,
         };
         
         // Create the 2 players
         var player_0 = Object.create(player);
         player_0.id = 0;
-        player_0.globalPt = 0;
-        player_0.currentPt = 0;
+        player_0.point = 0;
         
         var player_1 = Object.create(player);
         player_1.id = 1;
-        player_1.globalPt = 0;
-        player_1.currentPt = 0;
+        player_1.point = 0;
     
         // Setup the game object
         this.theGame = {
             winningPt: 100,
+            roundPt: 0,
             players: [player_0, player_1],
             activePlayer: player_0,
 
@@ -71,24 +51,24 @@ GAME RULES:
                 document.getElementById('dice').src = 'dice-' + dice + '.png';
 
                 if (dice === 1) { // If rolled dice is 1, reset current point of active player to 0, the other player takes turn
-                    this.activePlayer.currentPt = 0;
-                    document.getElementById('current-' + this.activePlayer.id).innerHTML = this.activePlayer.currentPt;
+                    this.roundPt = 0;
+                    document.getElementById('current-' + this.activePlayer.id).innerHTML = this.roundPt;
                     this.nextPlayerTurn();
                 } else { // Otherwise, the active player's current point is increased
-                    this.activePlayer.currentPt += dice;
-                    document.getElementById('current-' + this.activePlayer.id).innerHTML = this.activePlayer.currentPt;
+                    this.roundPt += dice;
+                    document.getElementById('current-' + this.activePlayer.id).innerHTML = this.roundPt;
                 }
             },
         
             // Add current point to global point and reset current point to 0
             hold: function() {
-                this.activePlayer.globalPt += this.activePlayer.currentPt;
-                this.activePlayer.currentPt = 0;
-                document.getElementById('score-' + this.activePlayer.id).innerHTML = this.activePlayer.globalPt;
-                document.getElementById('current-' + this.activePlayer.id).innerHTML = this.activePlayer.currentPt;
+                this.activePlayer.point += this.roundPt;
+                this.roundPt = 0;
+                document.getElementById('score-' + this.activePlayer.id).innerHTML = this.activePlayer.point;
+                document.getElementById('current-' + this.activePlayer.id).innerHTML = this.roundPt;
 
-                if (this.activePlayer.globalPt >= this.winningPt) {
-                    alert('Player ' + this.activePlayer.id + ' WIN!!!');
+                if (this.activePlayer.point >= this.winningPt) {
+                    alert('Player ' + (this.activePlayer.id + 1) + ' WIN!!!');
                     startNewGame();
                 } else {
                     this.nextPlayerTurn();
