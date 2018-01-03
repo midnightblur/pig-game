@@ -6,6 +6,7 @@ GAME RULES:
 - BUT, if the player rolls a 1, all his ROUND score gets lost. After that, it's the next player's turn
 - The player can choose to 'Hold', which means that his ROUND score gets added to his GLBAL score. After that, it's the next player's turn
 - The first player to reach 100 points on GLOBAL score wins the game
+- A player loses all of his score if he rolls 2 6 dice in a row, then it's the next player's turn
 
 */
 
@@ -29,6 +30,7 @@ GAME RULES:
     this.theGame = {
         winningPt: 100,
         roundPt: 0,
+        previousDice: 0,
         players: [player_0, player_1],
         activePlayer: player_0,
         isPlaying: true,
@@ -43,6 +45,7 @@ GAME RULES:
                 activeIndex++;
             }
             this.activePlayer = this.players[activeIndex];
+            this.previousDice = 0;
             document.querySelector('.player-' + this.activePlayer.id +'-panel').classList.toggle('active');
             hideTheDice();
         },
@@ -55,14 +58,24 @@ GAME RULES:
                 var diceImg = document.getElementById('dice');
                 diceImg.style.display = 'block';
                 diceImg.src = 'dice-' + dice + '.png';
-
-                if (dice === 1) { // If rolled dice is 1, reset current point of active player to 0, the other player takes turn
+                console.log('dice = ' + dice);
+                console.log('previousDice = ' + this.previousDice);
+                if (dice === this.previousDice === 6) { // If the player rolls two 6 dice in a row
+                    this.activePlayer.point = 0;
                     this.roundPt = 0;
+                    document.getElementById('score-' + this.activePlayer.id).textContent = this.activePlayer.point;
                     document.getElementById('current-' + this.activePlayer.id).textContent = this.roundPt;
                     this.nextPlayerTurn();
-                } else { // Otherwise, the active player's current point is increased
-                    this.roundPt += dice;
-                    document.getElementById('current-' + this.activePlayer.id).textContent = this.roundPt;
+                } else {
+                    this.previousDice = dice;
+                    if (dice === 1) { // If rolled dice is 1, reset current point of active player to 0, the other player takes turn
+                        this.roundPt = 0;
+                        document.getElementById('current-' + this.activePlayer.id).textContent = this.roundPt;
+                        this.nextPlayerTurn();
+                    } else { // Otherwise, the active player's current point is increased
+                        this.roundPt += dice;
+                        document.getElementById('current-' + this.activePlayer.id).textContent = this.roundPt;
+                    }
                 }
             }
         },
