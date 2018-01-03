@@ -44,7 +44,6 @@ GAME RULES:
             // Reset for the next turn
             document.getElementById('current-' + this.activePlayer.id).textContent = this.roundPt = 0;
             this.previousDice = 0;
-            hideTheDice();
 
             // Find the next player and set him to be active player
             var activeIndex = this.players.indexOf(this.activePlayer);
@@ -75,8 +74,8 @@ GAME RULES:
                 console.log('Previous dice = ' + this.previousDice);
 
                 // Update the dice image
-                var diceImg = document.getElementById('dice');
-                diceImg.style.display = 'block';
+                var diceImg = document.getElementById('dice-' + this.activePlayer.id);
+                diceImg.style.visibility = 'visible';
                 diceImg.src = 'dice-' + dice + '.png';
 
                 // Deciding how the game advance based on the dice result
@@ -109,7 +108,6 @@ GAME RULES:
                     activePlayerPanel.classList.add('winner');
                     activePlayerPanel.classList.toggle('active');
                     document.getElementById('name-' + this.activePlayer.id).textContent = 'WINNER';
-                    hideTheDice();
                     this.isPlaying = false;
                 } else {
                     this.nextPlayerTurn();
@@ -139,12 +137,9 @@ GAME RULES:
         document.getElementById('score-1').textContent = player_1.point = 0;
         document.getElementById('current-0').textContent = 0;
         document.getElementById('current-1').textContent = 0;
-        hideTheDice();
+        document.getElementById('dice-0').style.visibility = 'hidden';
+        document.getElementById('dice-1').style.visibility = 'hidden';
         theGame.isPlaying = true;
-    };
-
-    function hideTheDice() {
-        document.getElementById('dice').style.display = 'none';
     };
 
     // Setup onclick event listeners
